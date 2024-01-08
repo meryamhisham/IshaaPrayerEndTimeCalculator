@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Time Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #000;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0;
+            color: #000;
+        }
+
+        input {
+            ++padding: 5px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #000;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        p {
+            margin-top: 20px;
+            color: #000;
+        }
+    </style>
+    <script>
+        function calculateIshaTime() {
+            // Get Maghrib and Fajr times from input fields
+            var maghribTime = document.getElementById("maghribTime").value;
+            var fajrTime = document.getElementById("fajrTime").value;
+
+            // Convert times to minutes
+            var maghribMinutes = convertToMinutesPM(maghribTime);
+            var fajrMinutes = convertToMinutesAM(fajrTime);
+
+            // Halve the times
+            var halvedMaghrib = halveTime(maghribMinutes);
+            var halvedFajr = halveTime(fajrMinutes);
+
+            // Add the halved times
+            var middleOfTheNight = halvedMaghrib + halvedFajr;
+
+            // Add 6 hours
+            var ishaTime = addHours(middleOfTheNight, 6);
+
+            // Convert back to HH:mm format
+            ishaTime = convertToTimeFormat(ishaTime);
+
+            // Display the result
+            document.getElementById("result").innerHTML = "Isha Time: " + ishaTime;
+        }
+
+        function convertToMinutesPM(time) {
+            var splitTime = time.split(":");
+            return parseInt(splitTime[0]) * 60 + parseInt(splitTime[1]);
+        }
+
+        function convertToMinutesAM(time) {
+            var splitTime = time.split(":");
+            return parseInt(splitTime[0]) * 60 + parseInt(splitTime[1]) + 12 * 60;
+        }
+
+        function halveTime(time) {
+            return time / 2;
+        }
+
+        function addHours(time, hours) {
+            return time + hours * 60;
+        }
+
+        function convertToTimeFormat(minutes) {
+            var hours = Math.floor(minutes / 60) % 12 || 12;
+            var minutes = minutes % 60;
+            return padZero(hours) + ":" + padZero(minutes);
+        }
+
+        function padZero(num) {
+            return (num < 10 ? "0" : "") + num;
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Prayer Time Calculator</h1>
+    <label for="maghribTime">Maghrib Time:</label>
+    <input type="time" id="maghribTime">
+
+    <label for="fajrTime">Fajr Time:</label>
+    <input type="time" id="fajrTime">
+
+    <button onclick="calculateIshaTime()">Calculate Isha Time</button>
+
+    <p id="result"></p>
+</body>
+
+</html>
